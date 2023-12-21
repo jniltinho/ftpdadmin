@@ -30,9 +30,7 @@ func InitServer() {
 	//PrintUsers()
 	print("Hello, World!")
 
-	models.InitTables()
-
-	app.Listen(":3000")
+	app.Listen(configs.Server.Addr)
 }
 
 func PrintUsers() {

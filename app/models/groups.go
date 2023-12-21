@@ -1,5 +1,7 @@
 package models
 
+import "github.com/jniltinho/ftpdadmin/app/database"
+
 // Groups ProFTPd group table
 type Groups struct {
 	Groupname string `gorm:"unique;column:groupname;type:varchar(32);not null;default:''" json:"groupname"`
@@ -14,6 +16,6 @@ func (m *Groups) TableName() string {
 
 func (m *Groups) GetGroups() ([]Groups, error) {
 	var groups []Groups
-	DB().Find(&groups)
+	database.DB().Find(&groups)
 	return groups, nil
 }

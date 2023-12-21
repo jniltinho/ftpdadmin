@@ -1,4 +1,4 @@
-package models
+package database
 
 import (
 	"sync"
@@ -55,4 +55,7 @@ func DB() *gorm.DB {
 
 func init() {
 	dbInstance = &DBInstance{initializer: dbInit}
+
+	// Create Default Tables if not exists
+	InitTables()
 }

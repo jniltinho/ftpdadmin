@@ -4,6 +4,7 @@ import (
 	"errors"
 	"time"
 
+	"github.com/jniltinho/ftpdadmin/app/database"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
@@ -46,13 +47,13 @@ func (m *Users) TableName() string {
 
 func (u *Users) GetUsers() ([]Users, error) {
 	var users []Users
-	DB().Find(&users)
+	database.DB().Find(&users)
 	return users, nil
 }
 
 // GetFirstByID gets the user by his ID
 func (u *Users) GetFirstByID(id string) error {
-	err := DB().Where("id=?", id).First(u).Error
+	err := database.DB().Where("id=?", id).First(u).Error
 
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return ErrDataNotFound
@@ -63,7 +64,7 @@ func (u *Users) GetFirstByID(id string) error {
 
 // GetFirstByEmail gets the user by his email
 func (u *Users) GetFirstByEmail(email string) error {
-	err := DB().Where("email=?", email).First(u).Error
+	err := database.DB().Where("email=?", email).First(u).Error
 
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return ErrDataNotFound
@@ -74,7 +75,7 @@ func (u *Users) GetFirstByEmail(email string) error {
 
 // Create a new user
 func (u *Users) Create() error {
-	db := DB().Create(u)
+	db := database.DB().Create(u)
 
 	if db.Error != nil {
 		return db.Error
