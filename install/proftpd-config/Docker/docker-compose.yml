@@ -1,0 +1,69 @@
+version: '3'
+services:
+  
+  #ProFTPD Service
+  proftpd:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: jniltinho/poftpd
+    container_name: proftpd
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "20:20"
+      - "21:21"
+      - "60000-60100:60000-60100"
+    
+    working_dir: /srv/ftp
+    volumes:
+      - ./proftpd/proftpd.conf:/etc/proftpd/proftpd.conf
+      - ./data/ftp:/srv/ftp
+    networks:
+      - ftp-network
+    depends_on:
+      - mariadb
+    links:
+      - mariadb
+
+  #Apache Service
+  webserver:
+    build:
+      context: ../../../
+      dockerfile: Dockerfile-go
+    image: jniltinho/run-go
+    container_name: webserver
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "8080:3000"
+    volumes:
+      - ./html:/var/www/html
+    networks:
+      - ftp-network
+
+  #MariaDB Service
+  mariadb:
+    image: mariadb:10-jammy
+    container_name: mariadb
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "3306:3306"
+    environment:
+      MARIADB_DATABASE: proftpd
+      MARIADB_USER: proftpd
+      MARIADB_PASSWORD: proftpd
+      MARIADB_ROOT_PASSWORD: root
+      SERVICE_NAME: mariadb
+    volumes:
+      - ./data/mysql:/var/lib/mysql/
+      - ./data/dump:/dump
+      - ./mysql/50-server.cnf:/etc/mysql/mariadb.conf.d/50-server.cnf
+    networks:
+      - ftp-network
+
+#Docker Networks
+networks:
+  ftp-network:
+    driver: bridge

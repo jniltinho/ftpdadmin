@@ -1,0 +1,15 @@
+FROM gcr.io/distroless/base-debian11
+
+#docker build -t jniltinho/go-run -f Dockerfile-go ../../../
+#docker run --rm jniltinho/go-run
+
+WORKDIR /dist
+
+COPY ./dist/ .
+
+EXPOSE 3000
+
+USER nonroot:nonroot
+
+ENTRYPOINT ["./ftpdadmin"]
+
