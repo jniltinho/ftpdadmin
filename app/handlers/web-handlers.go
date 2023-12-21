@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"fmt"
-	"log"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
@@ -14,15 +13,20 @@ import (
 	"github.com/jniltinho/ftpdadmin/app/repository"
 )
 
-var store = session.New(session.Config{Expiration: 1 * time.Hour})
-var SALT = make(map[string]string)
+var (
+	store   = session.New(session.Config{Expiration: 1 * time.Hour})
+	SALT    = make(map[string]string)
+	InfoLog = configs.InfoLog
+)
 
 // Login route
 func Login(c *fiber.Ctx) error {
+	userIp := c.Context().RemoteIP().String()
 	// Extract the credentials from the request body
 	loginRequest := new(models.LoginRequest)
 	if err := c.BodyParser(loginRequest); err != nil {
 		c.Set("HX-Refresh", "true")
+		InfoLog("Error:%s; IP:%s", err.Error(), userIp)
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": err.Error(),
 		})
@@ -31,9 +35,8 @@ func Login(c *fiber.Ctx) error {
 	// Find the user by credentials
 	user, err := repository.FindByCredentials(loginRequest.Username, loginRequest.Password)
 	if err != nil {
-		//c.Set("HX-Refresh", "true")
+		InfoLog("Error:%s; Username:%s IP:%s", err.Error(), loginRequest.Username, userIp)
 		return c.SendString(err.Error())
-		//return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": err.Error(), "status": fiber.StatusUnauthorized})
 	}
 	day := time.Hour * 24
 	// Create the JWT claims, which includes the user ID and expiry time
@@ -59,54 +62,51 @@ func Login(c *fiber.Ctx) error {
 	}
 	c.Cookie(&cookie)
 
-	sess, err := store.Get(c)
-	if err != nil {
-		return c.SendString(err.Error())
+	// Get or create session
+	s, _ := store.Get(c)
+	if s.Fresh() {
+		// Get session ID
+		sid := s.ID()
+		salt := uuid.New().String()
+
+		// Save session data
+		s.Set("sid", sid)
+		s.Set("username", user.Username)
+		s.Set("salt", salt)
+		s.Set("ip", c.Context().RemoteIP().String())
+		s.Set("login", time.Unix(time.Now().Unix(), 0).UTC().String())
+		s.Set("ua", string(c.Request().Header.UserAgent()))
+
+		err := s.Save()
+		if err != nil {
+			return c.SendString(err.Error())
+		}
+
 	}
 
-	salt := uuid.New().String()
-
-	sess.Set("username", user.Username)
-	sess.Set("salt", salt)
-	if err := sess.Save(); err != nil {
-		return c.SendString(err.Error())
-	}
-
-	log.Println("User logged in: ", user.Username)
+	InfoLog("Login successful; Username:%s IP:%s", user.Username, userIp)
 	c.Set("HX-Redirect", "/")
 	//return c.Redirect("/", 302)
-	return c.Status(fiber.StatusOK).JSON(fiber.Map{
-		"message": "Login successful",
-	})
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{"message": "Login successful"})
 
 }
 
 func Logout(c *fiber.Ctx) error {
 
-	sess, err := store.Get(c)
-	if err != nil {
-		log.Println("Error:", err)
-	}
+	s, _ := store.Get(c)
 
-	keys := sess.Keys()
-	for _, key := range keys {
-		sess.Delete(key)
-	}
+	// Get session ID
+	ip := s.Get("ip")
+	username := s.Get("username")
+	ua := s.Get("ua")
+
+	// Delete session
+	s.Destroy()
 
 	//Delete cookie
 	c.ClearCookie("jwt")
 
-	for key := range SALT {
-		delete(SALT, key)
-	}
-
-	// Destroy session
-	if err := sess.Destroy(); err != nil {
-		log.Println("Error:", err)
-		c.Redirect("/login")
-	}
-
-	log.Println("Logout -- Deslogando")
+	InfoLog("User Logout; Username:%s IP:%s UA:%s", username, ip, ua)
 	//return c.JSON(fiber.Map{"message": "success"})
 	return c.Redirect("/login")
 }
@@ -126,18 +126,19 @@ func GetSession(c *fiber.Ctx) (*session.Session, error) {
 }
 
 func CheckSession(c *fiber.Ctx) error {
+	userIp := c.Context().RemoteIP().String()
 	// Get the session from the request.
-	sess, err := GetSession(c)
+	s, err := GetSession(c)
 
 	if err != nil {
 		return c.Redirect("/login")
 	}
 
-	if sess.Get("username") != nil {
-		log.Println("User logged in:", SALT["username"])
+	if s.Get("username") != nil {
+		InfoLog("User Logged in; Username:%s IP:%s UA:%s", s.Get("username"), userIp, s.Get("ua"))
 		return c.Next()
 	}
 
-	log.Println("User not logged in")
+	InfoLog("User Not Logged in; IP:%s", userIp)
 	return c.Redirect("/login")
 }

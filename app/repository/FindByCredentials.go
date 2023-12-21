@@ -18,5 +18,5 @@ func FindByCredentials(username, password string) (*models.User, error) {
 			FavoritePhrase: "Hello, World!",
 		}, nil
 	}
-	return nil, errors.New("user not found")
+	return nil, errors.New("User or password invalid")
 }
