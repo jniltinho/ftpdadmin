@@ -16,7 +16,7 @@ import (
 var (
 	store   = session.New(session.Config{Expiration: 1 * time.Hour})
 	SALT    = make(map[string]string)
-	InfoLog = configs.InfoLog
+	InfoLog = configs.Info
 )
 
 // Login route
