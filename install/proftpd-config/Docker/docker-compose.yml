@@ -1,12 +1,12 @@
 version: '3'
 services:
-  
+
   #ProFTPD Service
   proftpd:
     build:
       context: .
       dockerfile: Dockerfile
-    image: jniltinho/poftpd
+    image: poftpd-server-run
     container_name: proftpd
     restart: unless-stopped
     tty: true
@@ -14,11 +14,11 @@ services:
       - "20:20"
       - "21:21"
       - "60000-60100:60000-60100"
-    
+
     working_dir: /srv/ftp
     volumes:
       - ./proftpd/proftpd.conf:/etc/proftpd/proftpd.conf
-      - ./data/ftp:/srv/ftp
+      - ./proftpd/data:/srv/ftp
     networks:
       - ftp-network
     depends_on:
@@ -29,16 +29,16 @@ services:
   #Apache Service
   webserver:
     build:
-      context: ../../../
+      context: .
       dockerfile: Dockerfile-go
-    image: jniltinho/run-go
+    image: ftpdadmin-webserver-run
     container_name: webserver
     restart: unless-stopped
     tty: true
     ports:
       - "8080:3000"
     volumes:
-      - ./html:/var/www/html
+      - ./dist/config.yml:/dist/config.yml
     networks:
       - ftp-network
 
@@ -57,9 +57,9 @@ services:
       MARIADB_ROOT_PASSWORD: root
       SERVICE_NAME: mariadb
     volumes:
-      - ./data/mysql:/var/lib/mysql/
-      - ./data/dump:/dump
-      - ./mysql/50-server.cnf:/etc/mysql/mariadb.conf.d/50-server.cnf
+      - ./mysql/data:/var/lib/mysql/
+      - ./mysql/dump:/dump
+      - ./mysql/conf/50-server.cnf:/etc/mysql/mariadb.conf.d/50-server.cnf
     networks:
       - ftp-network
 
