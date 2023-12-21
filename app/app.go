@@ -29,6 +29,8 @@ func InitServer() {
 
 	//PrintUsers()
 
+	models.CreateTables()
+
 	app.Listen(":3000")
 }
 

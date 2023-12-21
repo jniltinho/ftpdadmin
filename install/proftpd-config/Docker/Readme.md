@@ -20,7 +20,9 @@ docker-compose exec mariadb bash -c "mysql -u root -h mariadb --password=root pr
 
 
 ## Links
-
-- https://hub.docker.com/_/mariadb
-- https://www.digitalocean.com/community/tutorials/how-to-set-up-laravel-nginx-and-mysql-with-docker-compose-on-ubuntu-20-04
-- https://github.com/docker/compose
+  
+  - https://hub.docker.com/_/mariadb
+  - https://github.com/wpcodevo/golang-fiber
+  - https://github.com/docker/compose
+  - https://codevoweb.com/create-crud-api-in-golang-using-fiber-and-gorm/
+  - https://dev.to/karanpratapsingh/connecting-to-postgresql-using-gorm-24fj
