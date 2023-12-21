@@ -10,6 +10,7 @@ git clone https://github.com/jniltinho/ftpdadmin.git
 cd ftpdadmin
 docker run --rm -v "$PWD":/build -w /build golang:1.21-bullseye make build-in-docker
 cp -aR dist install/proftpd-config/Docker/
+cd install/proftpd-config/Docker/
 docker-compose up -d
 docker-compose exec mariadb bash -c "mysql -u root -h mariadb --password=root proftpd < /dump/tables.sql"
 
