@@ -6,7 +6,8 @@ DIST_DIR = $(PWD)/dist
 
 
 run:
-	@go run main.go
+	#go run main.go
+	@air
 
 all: clean build-dev
 

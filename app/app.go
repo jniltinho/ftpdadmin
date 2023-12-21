@@ -28,8 +28,9 @@ func InitServer() {
 	routes.Static(app)
 
 	//PrintUsers()
+	print("Hello, World!")
 
-	models.CreateTables()
+	models.InitTables()
 
 	app.Listen(":3000")
 }

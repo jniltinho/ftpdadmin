@@ -68,8 +68,7 @@ func createQuotaTable() error {
 	return DB().Exec(query).Error
 }
 
-func CreateTables() {
-
+func InitTables() {
 	if err := createUsersTable(); err != nil {
 		log.Fatal().Err(err).Msg("Failed to create users table")
 	}

@@ -5,4 +5,5 @@ gormt
 /vendor
 dist
 build
+tmp
 ftpdadmin
