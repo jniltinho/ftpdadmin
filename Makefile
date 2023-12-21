@@ -1,4 +1,4 @@
-.PHONY: clean build
+.PHONY: clean build build-in-docker
 
 APP_NAME = ftpdadmin
 BUILD_DIR = $(PWD)/build
@@ -33,7 +33,7 @@ build-dist:
 	ls -sh $(DIST_DIR)/$(APP_NAME)
 	cp -aR views $(DIST_DIR)/views
 	cp -aR public $(DIST_DIR)/public
-	cp app-config.yml $(DIST_DIR)/app-config.yml
+	cp config.yml $(DIST_DIR)/config.yml
 
 build-win:
 	GOOS=windows go build -ldflags="-s -w" -o $(BUILD_DIR)/$(APP_NAME)-win64.exe
@@ -47,3 +47,9 @@ build-mac:
 	upx --best --lzma $(BUILD_DIR)/$(APP_NAME)-mac64
 	ls -sh $(BUILD_DIR)/$(APP_NAME)-mac64
 
+build-in-docker:
+	apt-get update && apt-get install -y --no-install-recommends xz-utils
+	curl -L# https://github.com/upx/upx/releases/download/v4.2.1/upx-4.2.1-amd64_linux.tar.xz | tar -xJv
+	mv upx-*-amd64_linux/upx /usr/local/bin/ && rm -rf upx-*-amd64_linux
+	make build-dist
+	mv /dist dist && chown -R 1000:1000 dist
