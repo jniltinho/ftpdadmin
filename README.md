@@ -26,6 +26,8 @@ cd ftpdadmin
 docker run --rm -v "$PWD":/build -w /build golang:1.21-bullseye make build-in-docker
 mv dist install/proftpd-config/Docker/
 cd install/proftpd-config/Docker/
+sed -i 's|localhost|mariadb|' dist/config.yml
+mkdir mysql/data
 docker-compose up -d
 docker-compose ps
 
