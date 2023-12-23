@@ -35,8 +35,7 @@ func InitServer() {
 }
 
 func PrintUsers() {
-	users := models.Users{}
-	result, _ := users.GetUsers()
+	result, _ := models.ListUsers()
 	utils.PrettyJson(result, false)
 }
 

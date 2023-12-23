@@ -37,8 +37,7 @@ func Default(a *fiber.App) {
 
 	a.Get("/users", handlers.CheckSession, func(c *fiber.Ctx) error {
 
-		users := models.Users{}
-		result, _ := users.GetUsers()
+		result, _ := models.ListUsers()
 		return c.Render("users", fiber.Map{"User": result})
 	})
 

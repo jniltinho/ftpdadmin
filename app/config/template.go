@@ -14,9 +14,10 @@ func Templates() *html.Engine {
 	engine := html.New("./views", ".html")
 
 	m := map[string]interface{}{
-		"formatTime": formatTime,
-		"formatDate": formatDate,
-		"bytesToMB":  bytesToMB,
+		"formatTime":   formatTime,
+		"formatDate":   formatDate,
+		"bytesToMB":    bytesToMB,
+		"userDisabled": userDisabled,
 	}
 	engine.AddFuncMap(m)
 
@@ -47,4 +48,11 @@ func bytesToMB(b uint64) string {
 	s := fmt.Sprintf("%2.1f", convert)
 	return s
 
+}
+
+func userDisabled(s uint16) string {
+	if s != 0 {
+		return "Yes"
+	}
+	return "No"
 }

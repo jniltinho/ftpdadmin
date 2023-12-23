@@ -38,6 +38,7 @@ type Users struct {
 	LastLogin      time.Time `gorm:"column:last_login;type:datetime;not null;default:0000-00-00 00:00:00" json:"last_login"`
 	LastModified   time.Time `gorm:"column:last_modified;type:datetime;not null;default:0000-00-00 00:00:00" json:"last_modified"`
 	Expiration     time.Time `gorm:"column:expiration;type:datetime;not null;default:0000-00-00 00:00:00" json:"expiration"`
+	Groupname      string    `gorm:"-" json:"group_name"`
 }
 
 // TableName get sql table name.获取数据库表名
@@ -126,4 +127,15 @@ func LoginByEmailAndPassword(email, password string) (*Users, error) {
 	}
 
 	return &user, user.Login(password)
+}
+
+func ListUsers() ([]Users, error) {
+	var users []Users
+	database.DB().Find(&users)
+
+	for key, value := range users {
+		group, _ := GetGroupByGid(value.Gid)
+		users[key].Groupname = group.Groupname
+	}
+	return users, nil
 }
