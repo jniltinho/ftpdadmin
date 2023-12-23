@@ -66,79 +66,33 @@
                 <th data-defaultsort="disabled"></th>
               </thead>
               <tbody>
-                                  <tr>
-                    <td class="pull-middle">8000</td>
-                    <td class="pull-middle"><a href="edit_user.php?action=show&id=1">nilton</a></td>
+
+                <body>
+                {{range .User}}
+                    <tr>
+                    <td class="pull-middle">{{.UID}}</td>
+                    <td class="pull-middle"><a href="edit_user/action=show&id=1">{{.Userid}}</a></td>
                     <td class="pull-middle">devops</td>
-                    <td class="pull-middle hidden-xs hidden-sm">
-                                              none
-                                          </td>
-                    <td class="pull-middle hidden-xs hidden-sm hidden-md">0000-00-00 00:00:00</td>
-                    <td class="pull-middle hidden-xs hidden-sm hidden-md">2024-01-18 05:19:00</td>
-                    <td class="pull-middle hidden-xs hidden-sm">0</td>
-                    <td class="pull-middle hidden-xs">0.0</td>
+                    <td class="pull-middle hidden-xs hidden-sm">none</td>
+                    <td class="pull-middle hidden-xs hidden-sm hidden-md">{{formatTime .LastLogin}}</td>
+                    <td class="pull-middle hidden-xs hidden-sm hidden-md">{{formatTime .Expiration}}</td>
+                    <td class="pull-middle hidden-xs hidden-sm">{{.LoginCount}}</td>
+                    <td class="pull-middle hidden-xs">{{bytesToMB .BytesInUsed}}</td>
                     <td class="pull-middle hidden-xs">0.0</td>
                     <td class="pull-middle hidden-xs">0</td>
                     <td class="pull-middle hidden-xs">0</td>
-                    <td class="pull-middle hidden-xs hidden-sm">/home/web/nilton</td>
-                    <td class="pull-middle hidden-xs hidden-sm">jniltinho@gmail.com</td>
+                    <td class="pull-middle hidden-xs hidden-sm">{{.Homedir}}</td>
+                    <td class="pull-middle hidden-xs hidden-sm">{{.Email}}</td>
                     <td class="pull-middle">No</td>
                     <td class="pull-middle">
                       <div class="btn-toolbar pull-right" role="toolbar">
-                        <a class="btn-group" role="group" href="edit_user.php?action=show&id=1"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
-                        <a class="btn-group" role="group" href="remove_user.php?action=remove&id=1"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
+                        <a class="btn-group" role="group" href="edit_user/action=show&id=1"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
+                        <a class="btn-group" role="group" href="remove_user/action=remove&id=1"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
                       </div>
                     </td>
                   </tr>
-                                  <tr>
-                    <td class="pull-middle">8000</td>
-                    <td class="pull-middle"><a href="edit_user.php?action=show&id=2">carlos</a></td>
-                    <td class="pull-middle">devops</td>
-                    <td class="pull-middle hidden-xs hidden-sm">
-                                              none
-                                          </td>
-                    <td class="pull-middle hidden-xs hidden-sm hidden-md">0000-00-00 00:00:00</td>
-                    <td class="pull-middle hidden-xs hidden-sm hidden-md">2024-01-18 06:01:52</td>
-                    <td class="pull-middle hidden-xs hidden-sm">0</td>
-                    <td class="pull-middle hidden-xs">0.0</td>
-                    <td class="pull-middle hidden-xs">0.0</td>
-                    <td class="pull-middle hidden-xs">0</td>
-                    <td class="pull-middle hidden-xs">0</td>
-                    <td class="pull-middle hidden-xs hidden-sm">/home/web/carlos</td>
-                    <td class="pull-middle hidden-xs hidden-sm"></td>
-                    <td class="pull-middle">No</td>
-                    <td class="pull-middle">
-                      <div class="btn-toolbar pull-right" role="toolbar">
-                        <a class="btn-group" role="group" href="edit_user.php?action=show&id=2"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
-                        <a class="btn-group" role="group" href="remove_user.php?action=remove&id=2"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
-                      </div>
-                    </td>
-                  </tr>
-                                  <tr>
-                    <td class="pull-middle">8000</td>
-                    <td class="pull-middle"><a href="edit_user.php?action=show&id=3">luiz</a></td>
-                    <td class="pull-middle">devops</td>
-                    <td class="pull-middle hidden-xs hidden-sm">
-                                              none
-                                          </td>
-                    <td class="pull-middle hidden-xs hidden-sm hidden-md">0000-00-00 00:00:00</td>
-                    <td class="pull-middle hidden-xs hidden-sm hidden-md">2024-01-18 20:05:01</td>
-                    <td class="pull-middle hidden-xs hidden-sm">0</td>
-                    <td class="pull-middle hidden-xs">0.0</td>
-                    <td class="pull-middle hidden-xs">0.0</td>
-                    <td class="pull-middle hidden-xs">0</td>
-                    <td class="pull-middle hidden-xs">0</td>
-                    <td class="pull-middle hidden-xs hidden-sm">/home/web/luiz</td>
-                    <td class="pull-middle hidden-xs hidden-sm"></td>
-                    <td class="pull-middle">No</td>
-                    <td class="pull-middle">
-                      <div class="btn-toolbar pull-right" role="toolbar">
-                        <a class="btn-group" role="group" href="edit_user.php?action=show&id=3"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
-                        <a class="btn-group" role="group" href="remove_user.php?action=remove&id=3"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
-                      </div>
-                    </td>
-                  </tr>
-                              </tbody>
+                  {{end}}
+                    </tbody>
             </table>
           </div>
           <!-- Actions -->

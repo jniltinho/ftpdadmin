@@ -4,6 +4,7 @@ import (
 	"github.com/jniltinho/ftpdadmin/app/config"
 	"github.com/jniltinho/ftpdadmin/app/handlers"
 	"github.com/jniltinho/ftpdadmin/app/middlewares"
+	"github.com/jniltinho/ftpdadmin/app/models"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -35,7 +36,10 @@ func Default(a *fiber.App) {
 	})
 
 	a.Get("/users", handlers.CheckSession, func(c *fiber.Ctx) error {
-		return c.Render("users", fiber.Map{})
+
+		users := models.Users{}
+		result, _ := users.GetUsers()
+		return c.Render("users", fiber.Map{"User": result})
 	})
 
 	a.Get("/groups", handlers.CheckSession, func(c *fiber.Ctx) error {

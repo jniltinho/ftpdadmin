@@ -1,7 +1,9 @@
 package config
 
 import (
+	"fmt"
 	"os"
+	"time"
 
 	"github.com/gofiber/template/html/v2"
 )
@@ -10,7 +12,13 @@ import (
 func Templates() *html.Engine {
 
 	engine := html.New("./views", ".html")
-	//engine := jet.New("./views", ".jet.html")
+
+	m := map[string]interface{}{
+		"formatTime": formatTime,
+		"formatDate": formatDate,
+		"bytesToMB":  bytesToMB,
+	}
+	engine.AddFuncMap(m)
 
 	// Delims sets the action delimiters to the specified strings
 	//engine.Delims("{{", "}}") // Optional. Default: engine delimiters
@@ -24,4 +32,19 @@ func Templates() *html.Engine {
 	}
 
 	return engine
+}
+
+func formatTime(t time.Time) string {
+	return t.Format("02-01-2006 15:04")
+}
+
+func formatDate(t time.Time, format string) string {
+	return t.Format(format)
+}
+
+func bytesToMB(b uint64) string {
+	convert := float64(b) / 1048576
+	s := fmt.Sprintf("%2.1f", convert)
+	return s
+
 }
