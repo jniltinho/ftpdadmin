@@ -19,3 +19,4 @@ max_open_conns = 16
 username = "admin"
 password = "admin"
 blowfish = "XBu5pjOTa8H7UIwYSzMZxD"
+secret = "secret"

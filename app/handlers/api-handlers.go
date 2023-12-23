@@ -36,7 +36,7 @@ func LoginApi(c *fiber.Ctx) error {
 	// Create token
 	token := jtoken.NewWithClaims(jtoken.SigningMethodHS256, claims)
 	// Generate encoded token and send it as response.
-	t, err := token.SignedString([]byte(config.Secret))
+	t, err := token.SignedString([]byte(config.Login.Secret))
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": err.Error(),

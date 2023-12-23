@@ -10,8 +10,6 @@ import (
 	"gorm.io/gorm/logger"
 )
 
-var conf = config.GetConfig
-
 // DBInstance is a singleton DB instance
 type DBInstance struct {
 	initializer func() any
@@ -32,20 +30,22 @@ func (i *DBInstance) Instance() any {
 }
 
 func dbInit() any {
-	lv := logger.Error
 
-	cfg := &gorm.Config{
-		Logger: logger.Default.LogMode(lv),
+	lv := logger.Error
+	if config.Server.Mode == "debug" {
+		lv = logger.Info
 	}
 
-	db, err := gorm.Open(mysql.Open(conf.Database.DSN), cfg)
+	cfg := &gorm.Config{Logger: logger.Default.LogMode(lv)}
+
+	db, err := gorm.Open(mysql.Open(config.Database.DSN), cfg)
 	if err != nil {
 		log.Fatal().Err(err).Msg("Cannot connect to database")
 	}
 
 	stdDB, _ := db.DB()
-	stdDB.SetMaxIdleConns(conf.Database.MaxIdleConns)
-	stdDB.SetMaxOpenConns(conf.Database.MaxOpenConns)
+	stdDB.SetMaxIdleConns(config.Database.MaxIdleConns)
+	stdDB.SetMaxOpenConns(config.Database.MaxOpenConns)
 
 	return db
 }

@@ -9,7 +9,7 @@ import (
 )
 
 func AppV1(a *fiber.App) {
-	jwt := middlewares.NewAuthMiddleware(config.Secret)
+	jwt := middlewares.NewAuthMiddleware(config.Login.Secret)
 	api := a.Group("/api") // /api
 
 	v1 := api.Group("/v1")                           // /api/v1

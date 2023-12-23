@@ -9,8 +9,6 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-var conf = config.GetConfig
-
 func InitServer() {
 
 	//users, _ := app.GetUsers()
@@ -32,8 +30,8 @@ func InitServer() {
 	PrintUsers()
 
 	// Start server
-	print("Server running on port " + conf.Server.Addr)
-	app.Listen(conf.Server.Addr)
+	print("  Server running on port " + config.Server.Addr)
+	app.Listen(config.Server.Addr)
 }
 
 func PrintUsers() {
