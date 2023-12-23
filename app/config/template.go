@@ -1,4 +1,4 @@
-package configs
+package config
 
 import (
 	"os"
@@ -9,6 +9,8 @@ import (
 // DefaultRoutes func for describe group of public routes.
 func Templates() *html.Engine {
 
+	var conf = GetConfig
+
 	engine := html.New("./views", ".html")
 	//engine := jet.New("./views", ".jet.html")
 
@@ -17,9 +19,10 @@ func Templates() *html.Engine {
 
 	// Reload the templates on each render, good for development
 
-	if os.Getenv("DEBUG") == "true" {
+	if os.Getenv("DEBUG") == "true" || conf.Server.Mode == "debug" {
 		engine.Reload(true) // Optional. Default: false
 		engine.Debug(true)
+		print("Debug mode")
 	}
 
 	return engine

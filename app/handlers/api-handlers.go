@@ -5,7 +5,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	jtoken "github.com/golang-jwt/jwt/v4"
-	"github.com/jniltinho/ftpdadmin/app/configs"
+	"github.com/jniltinho/ftpdadmin/app/config"
 	"github.com/jniltinho/ftpdadmin/app/models"
 	"github.com/jniltinho/ftpdadmin/app/repository"
 )
@@ -36,7 +36,7 @@ func LoginApi(c *fiber.Ctx) error {
 	// Create token
 	token := jtoken.NewWithClaims(jtoken.SigningMethodHS256, claims)
 	// Generate encoded token and send it as response.
-	t, err := token.SignedString([]byte(configs.Secret))
+	t, err := token.SignedString([]byte(config.Secret))
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": err.Error(),

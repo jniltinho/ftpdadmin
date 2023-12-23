@@ -3,12 +3,14 @@ package database
 import (
 	"sync"
 
-	"github.com/jniltinho/ftpdadmin/app/configs"
+	"github.com/jniltinho/ftpdadmin/app/config"
 	"github.com/rs/zerolog/log"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 )
+
+var conf = config.GetConfig
 
 // DBInstance is a singleton DB instance
 type DBInstance struct {
@@ -36,14 +38,14 @@ func dbInit() any {
 		Logger: logger.Default.LogMode(lv),
 	}
 
-	db, err := gorm.Open(mysql.Open(configs.Database.DSN), cfg)
+	db, err := gorm.Open(mysql.Open(conf.Database.DSN), cfg)
 	if err != nil {
 		log.Fatal().Err(err).Msg("Cannot connect to database")
 	}
 
 	stdDB, _ := db.DB()
-	stdDB.SetMaxIdleConns(configs.Database.MaxIdleConns)
-	stdDB.SetMaxOpenConns(configs.Database.MaxOpenConns)
+	stdDB.SetMaxIdleConns(conf.Database.MaxIdleConns)
+	stdDB.SetMaxOpenConns(conf.Database.MaxOpenConns)
 
 	return db
 }

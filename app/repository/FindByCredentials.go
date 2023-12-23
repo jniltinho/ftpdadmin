@@ -3,18 +3,20 @@ package repository
 import (
 	"errors"
 
-	"github.com/jniltinho/ftpdadmin/app/configs"
+	"github.com/jniltinho/ftpdadmin/app/config"
 	"github.com/jniltinho/ftpdadmin/app/models"
 )
+
+var conf = config.GetConfig
 
 // Simulate a database call
 func FindByCredentials(username, password string) (*models.User, error) {
 	// Here you would query your database for the user with the given email
-	if username == configs.Login.Username && password == configs.Login.Password {
+	if username == conf.Login.Username && password == conf.Login.Password {
 		return &models.User{
 			ID:             1,
-			Username:       configs.Login.Username,
-			Password:       configs.Login.Password,
+			Username:       conf.Login.Username,
+			Password:       conf.Login.Password,
 			FavoritePhrase: "Hello, World!",
 		}, nil
 	}

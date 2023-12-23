@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"github.com/jniltinho/ftpdadmin/app/configs"
+	"github.com/jniltinho/ftpdadmin/app/config"
 	"github.com/jniltinho/ftpdadmin/app/handlers"
 	"github.com/jniltinho/ftpdadmin/app/middlewares"
 
@@ -9,7 +9,7 @@ import (
 )
 
 func AppV1(a *fiber.App) {
-	jwt := middlewares.NewAuthMiddleware(configs.Secret)
+	jwt := middlewares.NewAuthMiddleware(config.Secret)
 	api := a.Group("/api") // /api
 
 	v1 := api.Group("/v1")                           // /api/v1

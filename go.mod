@@ -3,6 +3,7 @@ module github.com/jniltinho/ftpdadmin
 go 1.21.4
 
 require (
+	github.com/BurntSushi/toml v1.3.2
 	github.com/gofiber/fiber/v2 v2.51.0
 	github.com/gofiber/jwt/v3 v3.3.10
 	github.com/gofiber/template/html/v2 v2.0.5
@@ -11,7 +12,6 @@ require (
 	github.com/hexops/valast v1.4.4
 	github.com/rs/zerolog v1.31.0
 	golang.org/x/crypto v0.7.0
-	gopkg.in/yaml.v2 v2.4.0
 	gorm.io/driver/mysql v1.5.2
 	gorm.io/gorm v1.25.5
 )

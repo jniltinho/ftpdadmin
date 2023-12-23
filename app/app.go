@@ -1,13 +1,15 @@
 package app
 
 import (
-	"github.com/jniltinho/ftpdadmin/app/configs"
+	"github.com/jniltinho/ftpdadmin/app/config"
 	"github.com/jniltinho/ftpdadmin/app/models"
 	"github.com/jniltinho/ftpdadmin/app/routes"
 	"github.com/jniltinho/ftpdadmin/app/utils"
 
 	"github.com/gofiber/fiber/v2"
 )
+
+var conf = config.GetConfig
 
 func InitServer() {
 
@@ -18,19 +20,20 @@ func InitServer() {
 	//utils.PrettyJson(user, false)
 
 	// Define Fiber config.
-	config := configs.FiberConfig()
+	cfg := config.FiberConfig()
 
 	// Define a new Fiber app with config.
-	app := fiber.New(config)
+	app := fiber.New(cfg)
 
 	routes.Default(app)
 	routes.AppV1(app)
 	routes.Static(app)
 
-	//PrintUsers()
-	print("Hello, World!")
+	PrintUsers()
 
-	app.Listen(configs.Server.Addr)
+	// Start server
+	print("Server running on port " + conf.Server.Addr)
+	app.Listen(conf.Server.Addr)
 }
 
 func PrintUsers() {
