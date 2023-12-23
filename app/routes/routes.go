@@ -42,15 +42,15 @@ func Default(a *fiber.App) {
 	})
 
 	a.Get("/groups", handlers.CheckSession, func(c *fiber.Ctx) error {
-		return c.SendString("New Page Grupos")
+		return c.Render("groups", fiber.Map{})
 	})
 
 	a.Get("/add_group", handlers.CheckSession, func(c *fiber.Ctx) error {
-		return c.SendString("New Page Adicionar Grupo")
+		return c.Render("add_group", fiber.Map{})
 	})
 
 	a.Get("/add_user", handlers.CheckSession, func(c *fiber.Ctx) error {
-		return c.SendString("New Page Adicionar Usuario")
+		return c.Render("add_user", fiber.Map{})
 	})
 
 	a.Post("/login", handlers.Login)

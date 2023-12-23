@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FTPD Admin</title>
+    <link rel="stylesheet" type="text/css" media="screen" href="/static/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="/static/bootstrap/css/bootstrap-sortable.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="/static/bootstrap/css/bootstrap-multiselect.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="/static/css/admin.css" />
+    <script src="/static/js/htmx.min.js"></script>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="/home">FTPD Admin</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="/groups">Groups</a></li>
+                <li><a href="/users">Users</a></li>
+                <li><a href="/add_group">Add Group</a></li>
+                <li><a href="/add_user">Add User</a></li>
+                <li><a href="/logout">Logout</a></li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+      <div class="row">
+<div class="col-xs-12 col-sm-8 col-md-6 center">
+</div>
+
+
+
+<div class="col-xs-12 col-sm-8 col-md-6 center">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Add user</h3>
+    </div>
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-sm-12">
+          <form role="form" class="form-horizontal" method="post" data-toggle="validator">
+            <!-- User name -->
+            <div class="form-group">
+              <label for="userid" class="col-sm-4 control-label">User name</label>
+              <div class="controls col-sm-8">
+                <input type="text" class="form-control" id="userid" name="userid" value="" placeholder="Enter a user name" maxlength="32" pattern="([a-zA-Z][a-zA-Z0-9_\-]{0,31})" required />
+                <p class="help-block"><small>Only letters, numbers, hyphens, and underscores. Maximum 32 characters.</small></p>
+              </div>
+            </div>
+            <!-- UID -->
+            <div class="form-group">
+              <label for="uid" class="col-sm-4 control-label">UID</label>
+              <div class="controls col-sm-8">
+                <input type="number" class="form-control" id="uid" name="uid" value="8000" min="1" placeholder="Enter a UID" required />
+                <p class="help-block"><small>Positive integer.</small></p>
+              </div>
+            </div>
+            <!-- Main group -->
+            <div class="form-group">
+              <label for="gid" class="col-sm-4 control-label">Main group</label>
+              <div class="controls col-sm-8">
+                <select class="form-control multiselect" id="gid" name="gid" required>
+                    <option value="8000">devops</option>
+                    <option value="8010">sysadmin</option>
+                    <option value="8020">linux</option>
+                </select>
+              </div>
+            </div>
+            <!-- Additional groups -->
+            <div class="form-group">
+              <label for="ad_gid" class="col-sm-4 control-label">Additional groups</label>
+              <div class="controls col-sm-8">
+                <select class="form-control multiselect" id="ad_gid" name="ad_gid[]" multiple="multiple">
+                        <option value="8000" >devops</option>
+                        <option value="8010" >sysadmin</option>
+                        <option value="8020" >linux</option>
+                </select>
+              </div>
+            </div>
+            <!-- Password -->
+            <div class="form-group">
+              <label for="passwd" class="col-sm-4 control-label">Password</label>
+              <div class="controls col-sm-8">
+                <input type="text" class="form-control" id="passwd" name="passwd" value="Lv5AFAChWs" placeholder="Enter a password" minlength="10" required />
+                <p class="help-block"><small>Minimum length 10 characters.</small></p>
+              </div>
+            </div>
+            <!-- expiration -->
+            <div class="form-group">
+              <label for="expiration" class="col-sm-4 control-label">Expiry Date</label>
+              <div class="controls col-sm-8" >
+                <input type="text" class="form-control" id='expiration' name="expiration" value="2024-01-23 20:28:03" maxlength="19" />
+              </div>
+            </div>
+            <!-- Home directory -->
+            <div class="form-group">
+              <label for="homedir" class="col-sm-4 control-label">Home directory</label>
+              <div class="controls col-sm-8">
+                <input type="text" class="form-control" id="homedir" name="homedir" value="/srv/ftp" placeholder="Enter a home directory" />
+              </div>
+            </div>
+            <!-- Shell -->
+            <div class="form-group">
+              <label for="shell" class="col-sm-4 control-label">Shell</label>
+              <div class="controls col-sm-8">
+                <input type="text" class="form-control" id="shell" name="shell" value="/bin/false" placeholder="Enter the user's shell" />
+              </div>
+            </div>
+            <!-- SSH Public Key -->
+            <div class="form-group">
+              <label for="sshpubkey" class="col-sm-4 control-label">SSH Public Key</label>
+              <div class="controls col-sm-8">
+                <textarea class="form-control" id="sshpubkey" name="sshpubkey" rows="9" placeholder=""></textarea>
+                <p class="help-block"><small> RFC4716 format </small></p>
+              </div>
+	    </div>
+            <!-- Title -->
+            <div class="form-group">
+              <label for="title" class="col-sm-4 control-label">Title</label>
+              <div class="col-sm-8">
+                <select class="form-control" id="title" name="title" required>
+                  <option value="m" selected="selected">Mr.</option>
+                  <option value="f" >Ms.</option>
+                </select>
+              </div>
+            </div>
+            <!-- Real name -->
+            <div class="form-group">
+              <label for="name" class="col-sm-4 control-label">Name</label>
+              <div class="controls col-sm-8">
+                <input type="text" class="form-control" id="name" name="name" value="" placeholder="Enter the user's real name" />
+              </div>
+            </div>
+            <!-- Email -->
+            <div class="form-group">
+              <label for="email" class="col-sm-4 control-label">E-mail</label>
+              <div class="controls col-sm-8">
+                <input type="email" class="form-control" id="email" name="email" value="" placeholder="Enter the user's email" />
+              </div>
+            </div>
+            <!-- Company -->
+            <div class="form-group">
+              <label for="company" class="col-sm-4 control-label">Company</label>
+              <div class="controls col-sm-8">
+                <input type="text" class="form-control" id="company" name="company" value="" placeholder="Enter a company or department" />
+              </div>
+            </div>
+            <!-- Comment -->
+            <div class="form-group">
+              <label for="comment" class="col-sm-4 control-label">Comment</label>
+              <div class="controls col-sm-8">
+                <textarea class="form-control" id="comment" name="comment" rows="3" placeholder="Enter a comment or additional information about the user"></textarea>
+              </div>
+            </div>
+            <!-- Suspended -->
+            <div class="form-group">
+              <label for="disabled" class="col-sm-4 control-label">Status</label>
+              <div class="controls col-sm-8">
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" id="disabled" name="disabled"  />Suspended account
+                  </label>
+                </div>
+              </div>
+            </div>
+            <!-- Actions -->
+            <div class="form-group">
+              <div class="col-sm-12">
+                <a class="btn btn-default" href="/users">&laquo; View users</a>
+                <button type="submit" class="btn btn-primary pull-right" name="action" value="create">Create user</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    </div><!-- /.row -->
+
+    <hr/>
+    <footer>
+    <center>
+        <p style="font-size:x-small">FTPD Admin 0.0.1 <a href="https://github.com/jniltinho/ftpdadmin">github.com/jniltinho/ftpdadmin</a> for more information.</p>
+    </center>
+    </footer>
+    </div> <!-- /container -->
+
+    <script src="/static/bootstrap/js/jquery.min.js"></script>
+    <script src="/static/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/static/bootstrap/js/jqBootstrapValidation.js"></script>
+    <script src="/static/bootstrap/js/moment.min.js"></script>
+    <script src="/static/bootstrap/js/bootstrap-sortable.js"></script>
+    <script src="/static/bootstrap/js/bootstrap-multiselect.js"></script>
+    <script src="/static/bootstrap/js/bootstrap-datetimepicker.js"></script>
+
+    <script type="text/javascript">
+    $(function () {
+    $('#expiration').datetimepicker({
+    useCurrent : false,
+    showClear: true,
+    format:'YYYY-MM-DD HH:mm:00',
+    minDate: 'now',
+        defaultDate: moment('2024-01-18 20:05:01',"YYYY-MM-DD HH:mm:00"),
+
+    });
+    });
+    </script>
+
+    <script>
+    $(function () {
+    $("input,select,textarea").not("[type=submit]").jqBootstrapValidation();
+    $(".multiselect").multiselect({
+        nonSelectedText: 'None selected',
+        inheritClass: true,
+        buttonWidth: '100%',
+        includeSelectAllOption: true,
+        enableFiltering: true,
+    });
+    } );
+    </script>
+
+    </body>
+    </html>
