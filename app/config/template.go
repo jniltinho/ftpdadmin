@@ -18,6 +18,7 @@ func Templates() *html.Engine {
 		"formatDate":   formatDate,
 		"bytesToMB":    bytesToMB,
 		"userDisabled": userDisabled,
+		"expiryDate":   expiryDate,
 	}
 	engine.AddFuncMap(m)
 
@@ -55,4 +56,9 @@ func userDisabled(s uint16) string {
 		return "Yes"
 	}
 	return "No"
+}
+
+func expiryDate() string {
+	t := time.Now().Add(time.Hour * 24 * 365)
+	return t.Format("2006-01-02 15:04:05")
 }

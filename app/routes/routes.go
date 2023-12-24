@@ -9,6 +9,8 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
+var Data = fiber.Map{}
+
 func AppV1(a *fiber.App) {
 	jwt := middlewares.NewAuthMiddleware(config.Login.Secret)
 	api := a.Group("/api") // /api
@@ -27,30 +29,37 @@ func Default(a *fiber.App) {
 	})
 
 	a.Get("/", handlers.CheckSession, func(c *fiber.Ctx) error {
-		//return c.SendString("Pagina Home")
-		return c.Render("home", fiber.Map{})
+		Data["Page"] = c.Route().Path
+		return c.Render("home", Data)
 	})
 
 	a.Get("/home", handlers.CheckSession, func(c *fiber.Ctx) error {
-		return c.Render("home", fiber.Map{})
+		Data["Page"] = c.Route().Path
+		return c.Render("home", Data)
 	})
 
 	a.Get("/users", handlers.CheckSession, func(c *fiber.Ctx) error {
-
-		result, _ := models.ListUsers()
-		return c.Render("users", fiber.Map{"User": result})
-	})
-
-	a.Get("/groups", handlers.CheckSession, func(c *fiber.Ctx) error {
-		return c.Render("groups", fiber.Map{})
-	})
-
-	a.Get("/add_group", handlers.CheckSession, func(c *fiber.Ctx) error {
-		return c.Render("add_group", fiber.Map{})
+		Data["Page"] = c.Route().Path
+		users, _ := models.ListUsers()
+		Data["Users"] = users
+		return c.Render("users", Data)
 	})
 
 	a.Get("/add_user", handlers.CheckSession, func(c *fiber.Ctx) error {
-		return c.Render("add_user", fiber.Map{})
+		Data["Page"] = c.Route().Path
+		return c.Render("add_user", Data)
+	})
+
+	a.Get("/groups", handlers.CheckSession, func(c *fiber.Ctx) error {
+		Data["Page"] = c.Route().Path
+		groups, _ := models.ListGroups()
+		Data["Groups"] = groups
+		return c.Render("groups", Data)
+	})
+
+	a.Get("/add_group", handlers.CheckSession, func(c *fiber.Ctx) error {
+		Data["Page"] = c.Route().Path
+		return c.Render("add_group", Data)
 	})
 
 	a.Post("/login", handlers.Login)

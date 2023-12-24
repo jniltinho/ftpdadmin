@@ -1,37 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>FTPD Admin</title>
-    <link rel="stylesheet" type="text/css" media="screen" href="/static/bootstrap/css/bootstrap.min.css" />
-    <link rel="stylesheet" type="text/css" media="screen" href="/static/bootstrap/css/bootstrap-sortable.css" />
-    <link rel="stylesheet" type="text/css" media="screen" href="/static/bootstrap/css/bootstrap-multiselect.css" />
-    <link rel="stylesheet" type="text/css" media="screen" href="/static/css/admin.css" />
-    <script src="/static/js/htmx.min.js"></script>
-  </head>
+{{template "partials/header" .}}
 
-  <body>
-    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-      <div class="container">
-        <div class="navbar-header">
-          <a class="navbar-brand" href="/home">FTPD Admin</a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-                <li><a href="/groups">Groups</a></li>
-                <li><a href="/users">Users</a></li>
-                <li><a href="/add_group">Add Group</a></li>
-                <li><a href="/add_user">Add User</a></li>
-                <li><a href="/logout">Logout</a></li>
-            </ul>
-        </div><!-- /.navbar-collapse -->
-      </div>
-    </nav>
 
-    <div class="container">
-      <div class="row">
 <div class="col-xs-12 col-sm-8 col-md-6 center">
 </div>
 
@@ -96,7 +65,7 @@
             <div class="form-group">
               <label for="expiration" class="col-sm-4 control-label">Expiry Date</label>
               <div class="controls col-sm-8" >
-                <input type="text" class="form-control" id='expiration' name="expiration" value="2024-01-23 20:28:03" maxlength="19" />
+                <input type="text" class="form-control" id='expiration' name="expiration" value="{{expiryDate}}" maxlength="19" />
               </div>
             </div>
             <!-- Home directory -->
@@ -184,49 +153,4 @@
   </div>
 </div>
 
-    </div><!-- /.row -->
-
-    <hr/>
-    <footer>
-    <center>
-        <p style="font-size:x-small">FTPD Admin 0.0.1 <a href="https://github.com/jniltinho/ftpdadmin">github.com/jniltinho/ftpdadmin</a> for more information.</p>
-    </center>
-    </footer>
-    </div> <!-- /container -->
-
-    <script src="/static/bootstrap/js/jquery.min.js"></script>
-    <script src="/static/bootstrap/js/bootstrap.min.js"></script>
-    <script src="/static/bootstrap/js/jqBootstrapValidation.js"></script>
-    <script src="/static/bootstrap/js/moment.min.js"></script>
-    <script src="/static/bootstrap/js/bootstrap-sortable.js"></script>
-    <script src="/static/bootstrap/js/bootstrap-multiselect.js"></script>
-    <script src="/static/bootstrap/js/bootstrap-datetimepicker.js"></script>
-
-    <script type="text/javascript">
-    $(function () {
-    $('#expiration').datetimepicker({
-    useCurrent : false,
-    showClear: true,
-    format:'YYYY-MM-DD HH:mm:00',
-    minDate: 'now',
-        defaultDate: moment('2024-01-18 20:05:01',"YYYY-MM-DD HH:mm:00"),
-
-    });
-    });
-    </script>
-
-    <script>
-    $(function () {
-    $("input,select,textarea").not("[type=submit]").jqBootstrapValidation();
-    $(".multiselect").multiselect({
-        nonSelectedText: 'None selected',
-        inheritClass: true,
-        buttonWidth: '100%',
-        includeSelectAllOption: true,
-        enableFiltering: true,
-    });
-    } );
-    </script>
-
-    </body>
-    </html>
+{{template "partials/footer" .}}
