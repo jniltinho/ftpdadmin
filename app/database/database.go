@@ -16,15 +16,11 @@ type DBInstance struct {
 	once        sync.Once
 }
 
-var (
-	dbInstance *DBInstance
-)
+var dbInstance *DBInstance
 
 // Instance gets the singleton instance
 func (i *DBInstance) Instance() any {
-	i.once.Do(func() {
-		i.instance = i.initializer()
-	})
+	i.once.Do(func() { i.instance = i.initializer() })
 	return i.instance
 }
 
@@ -58,5 +54,5 @@ func init() {
 	dbInstance = &DBInstance{initializer: dbInit}
 
 	// Create Default Tables if not exists
-	InitTables()
+	initTables()
 }
