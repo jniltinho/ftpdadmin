@@ -1,37 +1,26 @@
 package app
 
 import (
+	"fmt"
+
 	"github.com/jniltinho/ftpdadmin/app/config"
 	"github.com/jniltinho/ftpdadmin/app/models"
-	"github.com/jniltinho/ftpdadmin/app/routes"
+	"github.com/jniltinho/ftpdadmin/app/server"
 	"github.com/jniltinho/ftpdadmin/app/utils"
-
-	"github.com/gofiber/fiber/v2"
 )
 
 func InitServer() {
 
-	//users, _ := app.GetUsers()
-	//utils.PrettyJson(users, false)
-
-	//user, _ := app.GetUsersByID(2)
-	//utils.PrettyJson(user, false)
-
-	// Define Fiber config.
-	cfg := config.FiberConfig()
-
-	// Define a new Fiber app with config.
-	app := fiber.New(cfg)
-
-	routes.Default(app)
-	routes.AppV1(app)
-	routes.Static(app)
-
 	PrintUsers()
 
-	// Start server
-	print("  Server running on port " + config.Server.Addr)
-	app.Listen(config.Server.Addr)
+	server := server.New()
+	server.RegisterFiberRoutes()
+	port := config.Server.Addr
+	err := server.Listen(port)
+	if err != nil {
+		panic(fmt.Sprintf("cannot start server: %s", err))
+	}
+
 }
 
 func PrintUsers() {

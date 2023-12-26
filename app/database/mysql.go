@@ -4,7 +4,6 @@ import (
 	"sync"
 
 	"github.com/jniltinho/ftpdadmin/app/config"
-	"github.com/rs/zerolog/log"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -40,7 +39,7 @@ func dbInit() any {
 
 	db, err := gorm.Open(mysql.Open(config.Database.DSN), cfg)
 	if err != nil {
-		log.Fatal().Err(err).Msg("Cannot connect to database")
+		config.Fatal(err.Error(), "Cannot connect to database")
 	}
 
 	stdDB, _ := db.DB()

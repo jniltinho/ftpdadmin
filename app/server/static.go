@@ -1,4 +1,4 @@
-package routes
+package server
 
 import (
 	"time"
@@ -6,7 +6,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func Static(a *fiber.App) {
+func (s *FiberServer) StaticRoutes() {
 	// Create routes group.
 
 	// Static files
@@ -18,6 +18,6 @@ func Static(a *fiber.App) {
 		MaxAge:        3600,
 	}
 
-	a.Static("/static", "./public", config)
-	a.Static("/favicon.ico", "./public/favicon.ico", config)
+	s.Static("/static", "./public", config)
+	s.Static("/favicon.ico", "./public/favicon.ico", config)
 }
